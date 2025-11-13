@@ -1,22 +1,13 @@
-# Archivos del sistema
+# Ignorar archivos del sistema
+node_modules/
+.env
 .DS_Store
 Thumbs.db
-desktop.ini
 *.log
-
-# Configuraciones locales
-.vscode/
-node_modules/
-dist/
-build/
-.env
 *.dat
-*.json
+*.resources
 *.history
-*.cache
-*.tmp
-
-# Archivos temporales
-*.swp
-*.bak
-*.old
+.vscode/
+.idea/
+.dist/
+.build/

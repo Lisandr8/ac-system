@@ -3,47 +3,64 @@ import { useState } from "react";
 export default function Header() {
     const [menu, setMenu] = useState(false);
 
-    const handleBtn = () => {
-        setMenu(!menu);
+    const handleBtn = () => setMenu(!menu);
+
+    const handleNavigation = (id) => {
+        const element = document.getElementById(id);
+        if (element) element.scrollIntoView({ behavior: "smooth" });
+        setMenu(false);
     };
 
-    return (
-        <header className="fixed w-full text-xl flex justify-between items-center py-3 px-4 bg-white/80 backdrop-blur-md shadow-md">
-            <p className="font-semibold">
-                <i className="bi bi-snow2 mr-3 text-sky-500 text-3xl align-middle"></i>
-                AC Company
-            </p>
+    const navLinks = [
+        { icon: "bi bi-clipboard-check", label: "Appointment", id: "book" },
+        { icon: "bi bi-info-circle", label: "About Us", id: "about" },
+        { icon: "bi bi-nut", label: "Services", id: "services" },
+        { icon: "bi bi-person-lines-fill", label: "Contact", id: "contact" },
+    ];
 
-            <button
-                onClick={handleBtn}
-                className={`cursor-pointer p-1 rounded-md transition-colors 
-                ${menu
-                        ? "text-red-500 hover:bg-rose-100"
-                        : "text-sky-700 hover:bg-sky-100"
+    return (
+        <header className="z-50 fixed w-full bg-white shadow-md text-gray-700">
+            <div className="container mx-auto flex justify-between items-center py-4 px-5">
+                <p className="font-bold text-lg flex items-center">
+                    <i className="bi bi-snow2 mr-2 text-sky-600 text-3xl"></i>AC Company</p>
+                {/* Mobile Button */}
+                <button
+                    onClick={handleBtn}
+                    className="sm:hidden p-2 rounded-md transition cursor-pointer hover:text-red-600"
+                >
+                    <i className={`bi ${menu ? "bi-x-lg text-red-600" : "bi-list text-sky-700"} text-2xl transition-colors duration-300`}></i>
+                </button>
+
+                {/* Desktop Navigation */}
+                <nav className="hidden sm:flex space-x-8 font-medium">
+                    {navLinks.map((link, i) => (
+                        <button
+                            key={i}
+                            onClick={() => handleNavigation(link.id)}
+                            className="hover:text-sky-600 transition-colors cursor-pointer"
+                        >
+                            {link.label}
+                        </button>
+                    ))}
+                </nav>
+            </div>
+
+            {/* Mobile Dropdown */}
+            <nav
+                className={`sm:hidden bg-sky-50 border-t border-sky-100 flex flex-col overflow-hidden transition-all duration-500 ${menu ? "max-h-80" : "max-h-0"
                     }`}
             >
-                {menu
-                    ? (<i className="bi bi-x-circle text-3xl"></i>)
-                    : (<i className="bi bi-list text-3xl"></i>)}
-            </button>
-
-            {/* Drop menu (solo visible cuando menu es true) */}
-            {menu && (
-                <nav className="absolute top-full left-0 flex flex-col w-full bg-sky-50 text-sky-700 shadow-md">
-                    <button className="cursor-pointer transition-colors hover:bg-sky-100 flex px-10 py-2">
-                        <i className="mr-5 bi bi-clipboard-check"></i>Appointment
+                {navLinks.map((link, i) => (
+                    <button
+                        key={i}
+                        onClick={() => handleNavigation(link.id)}
+                        className="flex items-center px-6 py-3 text-sky-700 hover:bg-sky-100 transition"
+                    >
+                        <i className={`mr-3 ${link.icon}`}></i>
+                        {link.label}
                     </button>
-                    <button className="cursor-pointer transition-colors hover:bg-sky-100 flex px-10 py-2">
-                        <i className="mr-5 bi bi-info-circle"></i>About Us
-                    </button>
-                    <button className="cursor-pointer transition-colors hover:bg-sky-100 flex px-10 py-2">
-                        <i className="mr-5 bi bi-nut"></i>Services
-                    </button>
-                    <button className="cursor-pointer transition-colors hover:bg-sky-100 flex px-10 py-2">
-                        <i className="mr-5 bi bi-person-lines-fill"></i>Contact
-                    </button>
-                </nav>
-            )}
+                ))}
+            </nav>
         </header>
     );
 }
